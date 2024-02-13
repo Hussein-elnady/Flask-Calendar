@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        window.onload = function() {
+            // Get references to form elements and buttons
+            var form = document.getElementById('calendar-form');
+            var todayButton = document.getElementById('today-btn');
+            var nextMonthButton = document.getElementById('next-month-btn');
+    
+            // Today button click event handler
+            todayButton.addEventListener('click', function() {
+                var currentDate = new Date();
+                var year = currentDate.getFullYear();
+                var month = currentDate.getMonth() + 1; // Month is 0-indexed
+                document.getElementById('year').value = year;
+                document.getElementById('month').value = month;
+                form.submit(); // Submit the form
+            });
+    
+            // Next month button click event handler
+            nextMonthButton.addEventListener('click', function() {
+                var year = parseInt(document.getElementById('year').value);
+                var month = parseInt(document.getElementById('month').value);
+                if (month === 12) {
+                    year++;
+                    month = 1;
+                } else {
+                    month++;
+                }
+                document.getElementById('year').value = year;
+                document.getElementById('month').value = month;
+    
+                // Add this line to update the year and month values in the template
+                form.submit(); // Submit the form
+            });
+        };
+    </script>
+    
+</head>
+<body>
+    <h1>Calendar</h1>
+    <form id="calendar-form" method="post">
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" value="{{ year }}" min="1900" max="2100">
+        <label for="month">Month:</label>
+        <input type="number" id="month" name="month" value="{{ month }}" min="1" max="12">
+        <button type="submit">Go</button>
+        <button type="button" id="today-btn">Today</button>
+        <button type="button" id="next-month-btn">Next Month</button>
+    </form>
+    <table border="1">
+        <caption>{{ month }} - {{ year }}</caption>
+        <tr>
+            <th aria-label="Week number">Week</th>            
+            <th aria-label="Sunday">Sun</th>
+            <th aria-label="Monday">Mon</th>
+            <th aria-label="Tuesday">Tue</th>
+            <th aria-label="Wednesday">Wed</th>
+            <th aria-label="Thursday">Thu</th>
+            <th aria-label="Friday">Fri</th>
+            <th aria-label="Saturday">Sat</th>
+        </tr>
+        {% for week in cal %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                {% for day in week %}
+                    <td class="event-day" title="Event details" {% if today == day %} style="background-color: #f0f0f0; font-weight: bold;" {% endif %} {% if day == 0 %} style="color: #ccc;" {% elif day > num_days_in_month %} style="color: #007bff;" {% endif %}>{{ day }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

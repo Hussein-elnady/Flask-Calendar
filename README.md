@@ -14,6 +14,9 @@ This is a Flask web application that generates a customized calendar with the fo
 2. Run the Flask application: `python app.py`
 3. Access the application in your web browser at `http://localhost:5000`
 
+## Screenshot
+![Flask Calendar Screenshot](demo.png)
+
 ## Contributing
 Contributions are welcome! Please submit pull requests with any improvements or bug fixes.
 
